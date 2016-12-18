@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with SrgTools.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -45,7 +45,7 @@ public class IntegrateMcpSrg {
 
 	/**
 	 * @param args
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 	public static void main(String[] args) throws IOException {
 		if (args.length<4) {
@@ -60,12 +60,16 @@ public class IntegrateMcpSrg {
 		String[] headerFields=csvFields.readNext();
 		String[] headerMethods=csvMethods.readNext();
 		String[] lineParts;
-		while ((lineParts=csvFields.readNext())!=null)
-			if (Integer.parseInt(lineParts[2])==nSide)
+		while ((lineParts=csvFields.readNext())!=null) {
+		    int side = Integer.parseInt(lineParts[2]);
+			if (side == nSide || side == 2)
 				mapFields.put(lineParts[0],new CsvInfo(lineParts[1],lineParts[3]));
-		while ((lineParts=csvMethods.readNext())!=null)
-			if (Integer.parseInt(lineParts[2])==nSide)
-				mapMethods.put(lineParts[0],new CsvInfo(lineParts[1],lineParts[3]));
+		}
+		while ((lineParts=csvMethods.readNext())!=null) {
+            int side = Integer.parseInt(lineParts[2]);
+            if (side == nSide || side == 2)
+                mapMethods.put(lineParts[0],new CsvInfo(lineParts[1],lineParts[3]));
+		}
 		System.out.println("Loaded "+mapFields.size()+" fields and "+mapMethods.size()+" methods");
 		BufferedReader brSrg=new BufferedReader(new InputStreamReader(new FileInputStream(args[0])));
 		String line;
