@@ -393,12 +393,13 @@ public class JarCompare {
 				} else {
 					if (mTo.owner.equals(mapClasses.get(mFrom.owner))) {
 						String mToDesc=convertMethodDesc(mFrom.arguments,mapClasses);
-						if (mTo.arguments.equals(mToDesc)) {
-							mapMethods.put(mFrom,mTo);
+						mapMethods.put(mFrom,mTo);
+						/*if (!mTo.arguments.equals(mToDesc)) {
+						    System.err.println("Mismatching mappings from method "+mFrom.owner+" "+mFrom.name+" "+mFrom.arguments+" "+mTo.arguments);
 						} else {
 							System.err.println("Arguments do not match between methods, mismatch!");
 							return;
-						}
+						}*/
 					} else {
 						System.err.println("Methods moved between classes, mismatch!");
 						return;
@@ -417,7 +418,7 @@ public class JarCompare {
 		for (Field f : mapFields.keySet()) {
 			if (setClasses.contains(f.owner)) {
 				Field b=mapFields.get(f);
-				if (!f.name.equals(b.name)) {
+				if (!f.name.equals(b.name) || !f.owner.equals(b.owner)) {
 					System.out.println("FD: "+f.owner+"/"+f.name+" "+b.owner+"/"+b.name);
 					nFields++;
 				}
@@ -426,7 +427,7 @@ public class JarCompare {
 		for (Method m : mapMethods.keySet()) {
 			if (setClasses.contains(m.owner) && !m.name.equals("<init>")) {
 				Method b=mapMethods.get(m);
-				if (!m.name.equals(b.name)) {
+				if (!m.name.equals(b.name) || !m.owner.equals(b.owner)) {
 					System.out.println("MD: "+m.owner+"/"+m.name+" "+m.arguments+" "+b.owner+"/"+b.name+" "+b.arguments);
 					nMethods++;
 				}
